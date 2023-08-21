@@ -13,14 +13,14 @@ void get_URL( const string& host, const string& path )
   // cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
   // cerr << "Warning: get_URL() has not been implemented yet.\n";
   TCPSocket sock;
-  Address addr = Address(host, "http");
-  sock.connect(addr);
-  sock.write("GET " + path + " " + "HTTP/1.1\r\nHost: " + host + "\r\nConnection: close\r\n\r\n");
-  while (!sock.eof())
-  {
+  Address addr = Address( host, "http" );
+  sock.connect( addr );
+  sock.write( "GET " + path + " " + "HTTP/1.1\r\nHost: " + host + "\r\nConnection: close\r\n\r\n" );
+  while ( !sock.eof() ) {
     string buffer;
-    sock.read(buffer);
-    if (buffer.size()) cout << buffer;
+    sock.read( buffer );
+    if ( buffer.size() )
+      cout << buffer;
   }
   sock.close();
 }

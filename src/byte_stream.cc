@@ -4,15 +4,14 @@
 
 using namespace std;
 
-ByteStream::ByteStream( uint64_t capacity ) : 
-  capacity_( capacity ), buffer_(), bytes_pushed_(0), 
-  bytes_poped_(0), closed_(false), error_(false)
-   {}
+ByteStream::ByteStream( uint64_t capacity )
+  : capacity_( capacity ), buffer_(), bytes_pushed_( 0 ), bytes_poped_( 0 ), closed_( false ), error_( false )
+{}
 
 void Writer::push( string data )
 {
-  uint64_t push_size  = min(data.size(), available_capacity());
-  buffer_ += data.substr(0, push_size);
+  uint64_t push_size = min( data.size(), available_capacity() );
+  buffer_ += data.substr( 0, push_size );
   bytes_pushed_ += push_size;
 }
 
@@ -58,8 +57,8 @@ bool Reader::has_error() const
 
 void Reader::pop( uint64_t len )
 {
-  uint64_t pop_size = min(len, buffer_.size());
-  buffer_ = buffer_.substr(pop_size);
+  uint64_t pop_size = min( len, buffer_.size() );
+  buffer_ = buffer_.substr( pop_size );
   bytes_poped_ += pop_size;
 }
 
