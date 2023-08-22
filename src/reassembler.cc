@@ -4,13 +4,13 @@ using namespace std;
 
 Reassembler::Segment::Segment(uint64_t first, std::string data, bool eof)
 : first_(first), last_(first+data.size()), data_(data), eof_(eof)
-{ }
+{}
 
 Reassembler::Segment::Segment(uint64_t first, uint64_t last, std::string data, bool eof)
 : first_(first), last_(last), data_(data), eof_(eof)
-{ }
+{}
 
-Reassembler::Reassembler(): buffer_() { }
+Reassembler::Reassembler(): buffer_() {}
 
 void Reassembler::insert( uint64_t first_index, string data, bool is_last_substring, Writer& output )
 {
@@ -21,7 +21,7 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
   uint64_t last_index = first_index + data.size();
 
   // case1: data 在 capacity 之外
-  if (last_index < min_index || first_index > max_index) return;
+  if (first_index > max_index || last_index < min_index) return;
 
   // case2: data 必然有存在于 capacity 之内的，但是一端索引可能超过范围
   // 如果 last_index 超过
@@ -35,7 +35,7 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
   if (first_index < min_index)
   {
     data = data.substr(min_index - first_index);
-    min_index = first_index;
+    first_index = min_index;
   }
 
   // 这样得到的 data 和索引都是属于 capacity 范围之内的
@@ -56,15 +56,16 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
     if (seg.first_ > last_index)
     {
       temp.push_back(Segment(first_index, last_index, data, is_last_substring));
-      temp.push_back(seg);
       pushed = true;
+      temp.push_back(seg);
       continue;
     }
 
     // data 在 buffer 范围内有数据，但是可能有一侧越界
-    if (seg.first_ <= first_index)
+    if (seg.first_ < first_index)
     {
-      data += seg.data_.substr(0, first_index-seg.first_);
+      // 一定要 + data，而不是 data +=，顺序问题
+      data = seg.data_.substr(0, first_index-seg.first_) + data;
       first_index = seg.first_;
     }
 
@@ -82,7 +83,7 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
   {
     temp.push_back(Segment(first_index, last_index, data, is_last_substring));
   }
-  swap(temp, buffer_);
+  swap(buffer_, temp);
 
   // 从 buffer_ 中弹出首元，判断是否可以写入字节流
   const Segment& substring = buffer_.front();
