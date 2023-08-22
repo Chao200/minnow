@@ -3,9 +3,22 @@
 #include "byte_stream.hh"
 
 #include <string>
+#include <list>
 
 class Reassembler
 {
+private:
+  struct Segment
+  {
+    uint64_t first_, last_;
+    std::string data_;
+    bool eof_;
+
+    Segment(uint64_t first, std::string data, bool eof);
+    Segment(uint64_t first, uint64_t last, std::string data, bool eof);
+  };
+  std::list<Segment> buffer_;
+
 public:
   /*
    * Insert a new substring to be reassembled into a ByteStream.
@@ -27,6 +40,8 @@ public:
    *
    * The Reassembler should close the stream after writing the last byte.
    */
+  Reassembler();
+
   void insert( uint64_t first_index, std::string data, bool is_last_substring, Writer& output );
 
   // How many bytes are stored in the Reassembler itself?
