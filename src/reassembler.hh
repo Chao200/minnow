@@ -2,8 +2,8 @@
 
 #include "byte_stream.hh"
 
-#include <string>
 #include <list>
+#include <string>
 
 class Reassembler
 {
@@ -14,8 +14,8 @@ private:
     std::string data_;
     bool eof_;
 
-    Segment(uint64_t first, std::string data, bool eof);
-    Segment(uint64_t first, uint64_t last, std::string data, bool eof);
+    Segment( uint64_t first, std::string data, bool eof );
+    Segment( uint64_t first, uint64_t last, std::string data, bool eof );
   };
   std::list<Segment> buffer_;
 
