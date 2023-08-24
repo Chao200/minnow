@@ -34,6 +34,7 @@ TCPReceiverMessage TCPReceiver::send( const Writer& inbound_stream ) const
   if (!init_) return TCPReceiverMessage {nullopt, window_size};
 
   // stream_index->absolute_seqno->seq_no->ackno
+  // inbound_stream.bytes_pushed()-1+1
   Wrap32 ackno = Wrap32::wrap(inbound_stream.bytes_pushed(), zero_point_)+1;
   
   if (inbound_stream.is_closed()) ackno = ackno + 1;
