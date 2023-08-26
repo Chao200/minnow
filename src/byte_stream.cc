@@ -62,6 +62,15 @@ void Reader::pop( uint64_t len )
   bytes_poped_ += pop_size;
 }
 
+// std::string Reader::pop2( uint64_t len )
+// {
+//   uint64_t pop_size = min( len, buffer_.size() );
+//   std::string res = buffer_.substr(0, pop_size);
+//   buffer_ = buffer_.substr( pop_size );
+//   bytes_poped_ += pop_size;
+//   return res;
+// }
+
 uint64_t Reader::bytes_buffered() const
 {
   return buffer_.size();
