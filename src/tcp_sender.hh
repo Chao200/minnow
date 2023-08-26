@@ -13,7 +13,7 @@ class TCPSender
   bool is_SYN_ = false;  // 是否为 SYN
   bool is_FIN_ = false;  // 是否为 FIN
   uint64_t abs_seqno_ = 0; // 记录 push 时，每一段的abs seqno，要用绝对序列号，因为相对序列号会溢出
-  std::deque<TCPSenderMessage> readied_segments_ = {};        // 记录所有准备好发送的段
+  std::list<TCPSenderMessage> readied_segments_ = {};        // 记录所有准备好发送的段
 
   // *********************************
   // ************ 超时相关 ************
@@ -23,7 +23,7 @@ class TCPSender
 
   // *********************************
   // ************ 重传相关 ************
-  std::deque<TCPSenderMessage> outstanding_segments_ = {};    // 记录所有已发送未 ACK 的段
+  std::list<TCPSenderMessage> outstanding_segments_ = {};    // 记录所有已发送未 ACK 的段
   uint64_t outstanding_bytes_nums_ = 0;                       // 记录已发送未 ACK 的字节数
   uint64_t consecutive_retransmissions_nums_ = 0;             // 连续重传次数
   
