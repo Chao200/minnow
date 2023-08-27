@@ -41,6 +41,26 @@ private:
   // IP (known as Internet-layer or network-layer) address of the interface
   Address ip_address_;
 
+  // 映射，保存的是 IP地址 ---> {以太网地址(链路层地址)，存在时间}
+  std::unordered_map<uint32_t, std::pair<EthernetAddress, uint64_t>> mapping_ = {};
+
+  // 不可以是 EthernetAddress，必须是 uint32_t
+  // 需要将 EthernetAddress 转化为整数
+  // next_hop 的 EthernetAddress 转化为 32 位整数 -----> 数据报队列
+  std::unordered_map<uint32_t, std::queue<InternetDatagram>> nexthop_ipdatagram_mapping_ = {};
+
+  // ARP 请求相同的 IP 地址，不超过 5s
+  // next_hop 的 EthernetAddress 转化为 32 位整数 -----> 时间
+  std::unordered_map<uint32_t, uint64_t> arp_request_timer_ = {};
+
+  // 存储待发送的 链路层帧
+  std::queue<EthernetFrame> send_queue_ = {};
+
+  // 重复请求相同 IP 地址的 ARP 静默时间为 5s
+  uint64_t arp_send_timer_ = 5000;
+  // 映射存在时间为 30s
+  uint64_t arp_mapping_timer_ = 30000; // 30000ms = 30s
+
 public:
   // Construct a network interface with given Ethernet (network-access-layer) and IP (internet-layer)
   // addresses
