@@ -19,7 +19,7 @@ class TCPSender
   // ************ 超时相关 ************
   bool is_start_RTO_timer_ = false;   // 是否启动 RTO 计时器
   uint64_t initial_RTO_ms_;   // 默认初始 RTO 时间，单位 ms
-  int RTO_ms_;  // 记录现在的 RTO，为什么 int 不可以变成 uint64_t 或者 size_t
+  int RTO_ms_;  // RTO_ms_ 可能为负数，所以不可以是 uint64_t 或者 size_t
 
   // *********************************
   // ************ 重传相关 ************
