@@ -55,6 +55,16 @@ class Router
   // The router's collection of network interfaces
   std::vector<AsyncNetworkInterface> interfaces_ {};
 
+  struct RouteTable_
+  {
+    uint32_t route_prefix_ {};
+    uint8_t prefix_length_ {};
+    std::optional<Address> next_hop_ {};
+    size_t interface_num_ {};
+  };
+
+  std::vector<RouteTable_> route_table_ {};
+
 public:
   // Add an interface to the router
   // interface: an already-constructed network interface
@@ -66,9 +76,11 @@ public:
   }
 
   // Access an interface by index
+  // 通过索引获取接口
   AsyncNetworkInterface& interface( size_t N ) { return interfaces_.at( N ); }
 
   // Add a route (a forwarding rule)
+  // 添加一个路由到路由表中
   void add_route( uint32_t route_prefix,
                   uint8_t prefix_length,
                   std::optional<Address> next_hop,
