@@ -23,7 +23,7 @@ void get_URL( const string& host, const string& path )
     if ( buffer.size() )
       cout << buffer;
   }
-  tcp_sock.close();
+  tcp_sock.close();   // close
   // **************** Your code here ****************
 }
 
