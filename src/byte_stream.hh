@@ -50,8 +50,6 @@ public:
   std::string_view peek() const; // Peek at the next bytes in the buffer
   void pop( uint64_t len );      // Remove `len` bytes from the buffer
 
-  // std::string pop2( uint64_t len );
-
   bool is_finished() const; // Is the stream finished (closed and fully popped)?
   bool has_error() const;   // Has the stream had an error?
 
