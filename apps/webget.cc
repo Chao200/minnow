@@ -9,20 +9,22 @@ using namespace std;
 
 void get_URL( const string& host, const string& path )
 {
-  // Your code here
+  // **************** Your code here ****************
   // cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
   // cerr << "Warning: get_URL() has not been implemented yet.\n";
-  TCPSocket sock;
-  Address addr = Address( host, "http" );
-  sock.connect( addr );
-  sock.write( "GET " + path + " " + "HTTP/1.1\r\nHost: " + host + "\r\nConnection: close\r\n\r\n" );
-  while ( !sock.eof() ) {
+  TCPSocket tcp_sock;   // 建立 TCP 连接客户端
+  tcp_sock.connect( Address( host, "http" ) );   // 客户端直接连接服务器
+  // 写入字节流中，http 规范字符串
+  tcp_sock.write( "GET " + path + " " + "HTTP/1.1\r\nHost: " + host + "\r\nConnection: close\r\n\r\n" );
+  tcp_sock.shutdown(SHUT_WR);   // 关闭写入端
+  while ( !tcp_sock.eof() ) {   // 没到结尾，就一直读取
     string buffer;
-    sock.read( buffer );
+    tcp_sock.read( buffer );
     if ( buffer.size() )
       cout << buffer;
   }
-  sock.close();
+  tcp_sock.close();
+  // **************** Your code here ****************
 }
 
 int main( int argc, char* argv[] )
