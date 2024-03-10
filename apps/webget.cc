@@ -9,7 +9,7 @@ using namespace std;
 
 void get_URL( const string& host, const string& path )
 {
-  // **************** Your code here ****************
+  // **************** Your code start here ****************
   // cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
   // cerr << "Warning: get_URL() has not been implemented yet.\n";
   TCPSocket tcp_sock;   // 建立 TCP 连接客户端
@@ -24,7 +24,7 @@ void get_URL( const string& host, const string& path )
       cout << buffer;
   }
   tcp_sock.close();   // close
-  // **************** Your code here ****************
+  // **************** Your code end here ****************
 }
 
 int main( int argc, char* argv[] )
