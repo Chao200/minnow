@@ -24,7 +24,7 @@ To format code: `cmake --build build --target format`
 
 - lab1: `src\reassembler.cc`、`src\reassembler.hh`
 ```
-实现 receiver，即接收从网络中来的数据，并重新排序
+实现 Reassembler class，即接收从网络中来的数据，并重新排序
 通过 Writer 写入到 buffer 中，buffer 的容量是 capacity（`lab0 src\byte_stream.cc`）
 
 1. data 在 capcity 之外，包括前面和后面，直接舍弃，节省内存，提高利用率
