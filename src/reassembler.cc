@@ -68,33 +68,6 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
       continue;
     }
 
-    // // 方法 1
-    // if (first_index < seg.first_ && last_index > seg.last_)
-    // {
-    //   data = data;
-    // }
-    // else if (first_index >= seg.first_ && last_index <= seg.last_)
-    // {
-    //   data = seg.data_;
-    //   first_index = seg.first_;
-    //   last_index = seg.last_;
-    //   is_last_substring = seg.eof_;
-    // }
-    // else if (first_index < seg.first_)
-    // {
-    //   data += seg.data_.substr(last_index-seg.first_);
-    //   last_index = seg.last_;
-    //   is_last_substring = seg.eof_;
-    // }
-    // else if (last_index > seg.last_)
-    // {
-    //   data = seg.data_.substr(0, first_index-seg.first_) + data;
-    //   first_index = seg.first_;
-    // }
-
-    // if (is_last_substring) break;
-
-    // 方法 2
     // case3: data 与 buffer 中的数据有重叠
     if ( seg.first_ < first_index ) {
       // 一定要 + data，而不是 data +=，顺序问题
@@ -102,14 +75,14 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
       first_index = seg.first_;
     }
 
-    if ( is_last_substring )  // 如果是 eof，则下面的 if 不会成立
-      break;
-
     if ( seg.last_ > last_index ) {
       data += seg.data_.substr( last_index - seg.first_ );
       last_index = seg.last_;
       is_last_substring = seg.eof_;
     }
+
+    if ( is_last_substring )  // 是否 break
+      break;
   }
 
   if ( !pushed ) {  // buffer 为空的时候
