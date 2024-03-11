@@ -35,3 +35,18 @@ To format code: `cmake --build build --target format`
 6. 比对过程可能会出现 data 在旧数据的前面或者后面，还有重叠，需要截取
 ```
 
+![](https://file.fbichao.top/2024/03/c63a8aa9ce9f424f91de1f3c0359b4c4.png)
+
+- data 在 capacity 之外
+![](https://file.fbichao.top/2024/03/8b0e69763a9405ea92db38574c933e9e.png)
+
+- data 在 capacity 之内有内容，但是边界可能会超
+![](https://file.fbichao.top/2024/03/576de62f0bd37d51a79ab4f340f08179.png)
+
+- data 有一部分位于 seg，但是可能两侧有越界
+  - data 完全覆盖 seg 不需要操作，data 不变，只剩下两种情况
+  - data 左侧越界，但是不可以用 seg.first_ > first_index 作为判断，因为完全覆盖也满足该条件，所以应该使用 seg.last_ > last_index，此时要更新 last_index = seg.last_; is_last_substring = seg.eof_;
+  - 同理，右侧越界，seg.first_ < first_index，此时要更新 first_index = seg.first_;
+![](https://file.fbichao.top/2024/03/f7b79c713971c0a5597bb8bebd975dc5.png)
+
+- lab2: ``
