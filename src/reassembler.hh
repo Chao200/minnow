@@ -7,7 +7,7 @@
 
 class Reassembler
 {
-// *********** My code ***********
+  // *********** My code ***********
 private:
   struct Segment
   {
@@ -19,7 +19,7 @@ private:
     Segment( uint64_t first, uint64_t last, std::string data, bool eof );
   };
   std::list<Segment> buffer_;
-// *********** My code ***********
+  // *********** My code ***********
 
 public:
   /*

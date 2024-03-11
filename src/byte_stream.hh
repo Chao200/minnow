@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
-// ubuntu23 
+// ubuntu23
 #include <cstdint>
 
 class Reader;

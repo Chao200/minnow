@@ -11,17 +11,17 @@ Reassembler::Segment::Segment( uint64_t first, uint64_t last, std::string data, 
 {}
 
 /*
-* @brief buffer_ 存放已经到来还没 push 的数据
-*/
+ * @brief buffer_ 存放已经到来还没 push 的数据
+ */
 Reassembler::Reassembler() : buffer_() {}
 
 /*
-* @brief 将数据插入到 buffer 中
-* @param first_index 待插入数据的首部位置
-* @param data 待插入数据
-* @param is_last_substring 是否是最后一个字符串，即 eof
-* @param output 插入到 Writer 中
-*/
+ * @brief 将数据插入到 buffer 中
+ * @param first_index 待插入数据的首部位置
+ * @param data 待插入数据
+ * @param is_last_substring 是否是最后一个字符串，即 eof
+ * @param output 插入到 Writer 中
+ */
 void Reassembler::insert( uint64_t first_index, string data, bool is_last_substring, Writer& output )
 {
   // Writer 的 capacity 范围
@@ -81,11 +81,11 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
       is_last_substring = seg.eof_;
     }
 
-    if ( is_last_substring )  // 是否 break
+    if ( is_last_substring ) // 是否 break
       break;
   }
 
-  if ( !pushed ) {  // buffer 为空的时候
+  if ( !pushed ) { // buffer 为空的时候
     temp.push_back( Segment( first_index, last_index, data, is_last_substring ) );
   }
   // 此时 temp 已经有序，需要 swap
@@ -102,9 +102,9 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
 }
 
 /*
-* @brief 写入了多少字节
-* @return uint64_t 字节数
-*/
+ * @brief 写入了多少字节
+ * @return uint64_t 字节数
+ */
 uint64_t Reassembler::bytes_pending() const
 {
   uint64_t bytes_count = 0;

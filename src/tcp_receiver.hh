@@ -7,8 +7,8 @@
 class TCPReceiver
 {
 private:
-  Wrap32 zero_point_;
-  bool init_;
+  Wrap32 zero_point_; // ISN
+  bool init_;         // 是否收到 ISN，即初始化了 Seqno
 
 public:
   TCPReceiver();

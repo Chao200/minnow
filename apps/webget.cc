@@ -12,18 +12,18 @@ void get_URL( const string& host, const string& path )
   // **************** Your code start here ****************
   // cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
   // cerr << "Warning: get_URL() has not been implemented yet.\n";
-  TCPSocket tcp_sock;   // 建立 TCP 连接客户端
-  tcp_sock.connect( Address( host, "http" ) );   // 客户端直接连接服务器
+  TCPSocket tcp_sock;                          // 建立 TCP 连接客户端
+  tcp_sock.connect( Address( host, "http" ) ); // 客户端直接连接服务器
   // 写入字节流中，http 规范字符串
   tcp_sock.write( "GET " + path + " " + "HTTP/1.1\r\nHost: " + host + "\r\nConnection: close\r\n\r\n" );
-  tcp_sock.shutdown(SHUT_WR);   // 关闭写入端
+  tcp_sock.shutdown( SHUT_WR ); // 关闭写入端
   while ( !tcp_sock.eof() ) {   // 没到结尾，就一直读取
     string buffer;
     tcp_sock.read( buffer );
     if ( buffer.size() )
       cout << buffer;
   }
-  tcp_sock.close();   // close
+  tcp_sock.close(); // close
   // **************** Your code end here ****************
 }
 
