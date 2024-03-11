@@ -23,6 +23,9 @@ To format code: `cmake --build build --target format`
 
 
 - lab1: `src\reassembler.cc`、`src\reassembler.hh`
+
+![](https://file.fbichao.top/2024/03/c63a8aa9ce9f424f91de1f3c0359b4c4.png)
+
 ```
 实现 Reassembler class，即接收从网络中来的数据，并重新排序
 通过 Writer 写入到 buffer 中，buffer 的容量是 capacity（`lab0 src\byte_stream.cc`）
@@ -34,8 +37,6 @@ To format code: `cmake --build build --target format`
 5. 如果 data 的 first_index 与 capacity 的第一个索引（min_index）一样，则 push
 6. 比对过程可能会出现 data 在旧数据的前面或者后面，还有重叠，需要截取
 ```
-
-![](https://file.fbichao.top/2024/03/c63a8aa9ce9f424f91de1f3c0359b4c4.png)
 
 - data 在 capacity 之外
 ![](https://file.fbichao.top/2024/03/8b0e69763a9405ea92db38574c933e9e.png)
@@ -49,4 +50,39 @@ To format code: `cmake --build build --target format`
   - 同理，右侧越界，seg.first_ < first_index，此时要更新 first_index = seg.first_;
 ![](https://file.fbichao.top/2024/03/f7b79c713971c0a5597bb8bebd975dc5.png)
 
-- lab2: ``
+
+- lab2: `src\tcp_receiver.hh`、`src\tcp_receiver.cc`
+
+![](https://file.fbichao.top/2024/03/057e29abc6889c738aedbb5f9b650ced.png)
+
+```
+实现 seqno 和 absolute_seqno 之间的转换
+
+实现 TCPReceiver 的 receive 和 send
+- receive: 接受 peer(对等端)发送的信息并通过 reassemble 重整，经过 Writer 写入 stream
+- send: 回送 ack 和 window size
+```
+
+
+```C++
+struct TCPSenderMessage
+{
+  Wrap32 seqno { 0 };       // seqno
+  bool SYN { false };       // SYN
+  Buffer payload {};        // 有效载荷
+  bool FIN { false };       // FIN
+
+  // How many sequence numbers does this segment use?
+  size_t sequence_length() const { return SYN + payload.size() + FIN; }
+};
+```
+
+```C++
+struct TCPReceiverMessage
+{
+  std::optional<Wrap32> ackno {};    // 可选，ackno，如果还没有收到 ISN
+  uint16_t window_size {};           // 窗口大小
+};
+```
+
+
