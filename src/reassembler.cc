@@ -10,8 +10,18 @@ Reassembler::Segment::Segment( uint64_t first, uint64_t last, std::string data, 
   : first_( first ), last_( last ), data_( data ), eof_( eof )
 {}
 
+/*
+* @brief buffer_ 存放已经到来还没 push 的数据
+*/
 Reassembler::Reassembler() : buffer_() {}
 
+/*
+* @brief 将数据插入到 buffer 中
+* @param first_index 待插入数据的首部位置
+* @param data 待插入数据
+* @param is_last_substring 是否是最后一个字符串，即 eof
+* @param output 插入到 Writer 中
+*/
 void Reassembler::insert( uint64_t first_index, string data, bool is_last_substring, Writer& output )
 {
   // Writer 的 capacity 范围
@@ -40,17 +50,17 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
   // 这样得到的 data 和索引都是属于 capacity 范围之内的
 
   std::list<Segment> temp;
-  // 记录是否 push 了当前的数据
+  // 记录是否 push 了当前的数据，默认为 false
   bool pushed = false;
-  // 当前要加入的 data 和 buffer 中的 data 比较
+  // 当前要加入的 data 和 buffer 中的 data 比较，即调整位置，使得索引最小的在最前面
   for ( const Segment& seg : buffer_ ) {
-    // buffer 中的在 data 之前
+    // case1: buffer 中的数据在 data 之前，或者已经 push 过了
     if ( pushed || seg.last_ < first_index ) {
       temp.push_back( seg );
       continue;
     }
 
-    // buffer 中的在 data 之后
+    // case2: buffer 中的数据在 data 之后
     if ( seg.first_ > last_index ) {
       temp.push_back( Segment( first_index, last_index, data, is_last_substring ) );
       pushed = true;
@@ -85,14 +95,14 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
     // if (is_last_substring) break;
 
     // 方法 2
-    // data 在 buffer 范围内有数据，但是可能有一侧越界
+    // case3: data 与 buffer 中的数据有重叠
     if ( seg.first_ < first_index ) {
       // 一定要 + data，而不是 data +=，顺序问题
       data = seg.data_.substr( 0, first_index - seg.first_ ) + data;
       first_index = seg.first_;
     }
 
-    if ( is_last_substring )
+    if ( is_last_substring )  // 如果是 eof，则下面的 if 不会成立
       break;
 
     if ( seg.last_ > last_index ) {
@@ -102,9 +112,10 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
     }
   }
 
-  if ( !pushed ) {
+  if ( !pushed ) {  // buffer 为空的时候
     temp.push_back( Segment( first_index, last_index, data, is_last_substring ) );
   }
+  // 此时 temp 已经有序，需要 swap
   swap( buffer_, temp );
 
   // 从 buffer_ 中弹出首元，判断是否可以写入字节流
@@ -117,6 +128,10 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
   }
 }
 
+/*
+* @brief 写入了多少字节
+* @return uint64_t 字节数
+*/
 uint64_t Reassembler::bytes_pending() const
 {
   uint64_t bytes_count = 0;

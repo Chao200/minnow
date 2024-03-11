@@ -7,6 +7,7 @@
 
 class Reassembler
 {
+// *********** My code ***********
 private:
   struct Segment
   {
@@ -18,6 +19,7 @@ private:
     Segment( uint64_t first, uint64_t last, std::string data, bool eof );
   };
   std::list<Segment> buffer_;
+// *********** My code ***********
 
 public:
   /*
@@ -40,7 +42,9 @@ public:
    *
    * The Reassembler should close the stream after writing the last byte.
    */
+  // *********** My code ***********
   Reassembler();
+  // *********** My code ***********
 
   void insert( uint64_t first_index, std::string data, bool is_last_substring, Writer& output );
 
