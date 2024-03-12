@@ -20,6 +20,8 @@ NetworkInterface::NetworkInterface( const EthernetAddress& ethernet_address, con
 
 // Note: the Address type can be converted to a uint32_t (raw 32-bit IP address) by using the
 // Address::ipv4_numeric() method.
+// @brief 记录映射 IP--->{链路层地址, 时间}，ARP 请求 IP 地址----->时间
+// @brief 如果是可发送的数据，就将数据装帧；否则查看是否发送过 ARP 请求不超过 5s；否则将 ARP 信息装帧发送
 void NetworkInterface::send_datagram( const InternetDatagram& dgram, const Address& next_hop )
 {
   // 映射中能找到
@@ -124,7 +126,10 @@ optional<InternetDatagram> NetworkInterface::recv_frame( const EthernetFrame& fr
   return nullopt;
 }
 
-// ms_since_last_tick: the number of milliseconds since the last call to this method
+/* 
+* @brief 计时器，用于映射和 ARP 请求计时
+* @param ms_since_last_tick: the number of milliseconds since the last call to this method
+*/
 void NetworkInterface::tick( const size_t ms_since_last_tick )
 {
   // 遍历 mapping 30s
@@ -146,6 +151,10 @@ void NetworkInterface::tick( const size_t ms_since_last_tick )
   }
 }
 
+/*
+* @brief 发送链路层帧
+* @return optional<EthernetFrame> 有数据则返回数据，无返回 nullopt
+*/
 optional<EthernetFrame> NetworkInterface::maybe_send()
 {
   // 弹出首元
