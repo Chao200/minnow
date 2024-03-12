@@ -49,13 +49,12 @@ void Router::route()
         }
       }
       
+      // 找到匹配项传输数据
       if ( match != route_table_.end() ) {
         if ( match->next_hop_ )
           interface( match->interface_num_ ).send_datagram( *datagram, *( match->next_hop_ ) );
         else
           interface( match->interface_num_ ).send_datagram( *datagram, Address::from_ipv4_numeric( dst ) );
-        // interface(match->interface_num_).send_datagram(*datagram, match->next_hop_.value_or(
-        // Address::from_ipv4_numeric( dst )));
       }
 
       datagram = cur_interface.maybe_receive();
