@@ -64,25 +64,9 @@ To format code: `cmake --build build --target format`
 ```
 
 
-```C++
-struct TCPSenderMessage
-{
-  Wrap32 seqno { 0 };       // seqno
-  bool SYN { false };       // SYN
-  Buffer payload {};        // 有效载荷
-  bool FIN { false };       // FIN
+- lab3: `src\tcp_sender.hh`、`src\tcp_sender.cc`
 
-  // How many sequence numbers does this segment use?
-  size_t sequence_length() const { return SYN + payload.size() + FIN; }
-};
 ```
-
-```C++
-struct TCPReceiverMessage
-{
-  std::optional<Wrap32> ackno {};    // 可选，ackno，如果还没有收到 ISN
-  uint16_t window_size {};           // 窗口大小
-};
+实现发送端的发送数据、超时重传、计时器、流量控制
 ```
-
 
