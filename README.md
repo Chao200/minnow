@@ -15,10 +15,10 @@ To format code: `cmake --build build --target format`
 
 # 实现
 
-lab0 可靠字节流
-lab1~3 实现 TCP
-lab4 实现 IP 和链路层接口
-lab5 实现 IP 路由
+- lab0 可靠字节流
+- lab1~3 实现 TCP
+- lab4 实现 IP 和链路层接口
+- lab5 实现 IP 路由
 
 ## lab0
 > `apps\webget.cc`、`src\byte_stream.cc`
