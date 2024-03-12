@@ -32,10 +32,13 @@ void Router::route()
       datagram->header.compute_checksum();
       // 最长前缀匹配，需要目的地的 IP 地址和路由表中的匹配
       uint32_t dst = datagram->header.dst;
-      auto match = route_table_.end();
       // std::optional<uint8_t> max_prefix_length {};
+      
+      // 初始化匹配项和长度
+      auto match = route_table_.end();
       uint8_t max_prefix_length = route_table_.begin()->prefix_length_;
       for ( auto it = route_table_.begin(); it != route_table_.end(); ++it ) {
+        // 如果 前缀为0 或者 前缀匹配
         if ( it->prefix_length_ == 0
              || ( dst >> ( 32 - it->prefix_length_ ) )
                   == ( ( it->route_prefix_ ) >> ( 32 - it->prefix_length_ ) ) ) {
@@ -43,13 +46,9 @@ void Router::route()
             match = it;
             max_prefix_length = it->prefix_length_;
           }
-          // if ( !max_prefix_length.has_value() || *max_prefix_length < it->prefix_length_ )
-          // {
-          //   max_prefix_length = it->prefix_length_;
-          //   match = it;
-          // }
         }
       }
+      
       if ( match != route_table_.end() ) {
         if ( match->next_hop_ )
           interface( match->interface_num_ ).send_datagram( *datagram, *( match->next_hop_ ) );
